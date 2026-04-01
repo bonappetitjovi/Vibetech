@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>We Sail Different</title>
+<link rel="icon" type="image/png" href="/Vibe_roger.png">
+<link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --bone: #e8d9c0;
+    --gold: #d4a017;
+    --blood: #8b0000;
+    --green: #2d6a2d;
+    --orange: #c45c10;
+    --teal: #1a6b6b;
+    --smoke: #1c1c1c;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--bone);
+    font-family: 'Space Mono', monospace;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* ——— NAV ——— */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 3rem;
+    background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
+    border-bottom: 1px solid rgba(212,160,23,0.15);
+  }
+
+  .nav-logo {
+    font-family: 'Pirata One', cursive;
+    font-size: 1.6rem;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 20px rgba(212,160,23,0.4);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.15em;
+    color: var(--bone);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--gold); }
+
+  /* ——— HERO ——— */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 6rem 2rem 4rem;
+  }
+
+  /* dramatic radial glow */
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 50% 60%, rgba(212,160,23,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* diagonal rule */
+  .hero-rule {
+    position: absolute;
+    width: 140%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(212,160,23,0.3), transparent);
+    top: 78%;
+    left: -20%;
+    transform: rotate(-3deg);
+  }
+
+  .flag-container {
+    width: min(720px, 95vw);
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0 30px 80px rgba(212,160,23,0.3)) drop-shadow(0 0 120px rgba(0,0,0,0.9));
+  }
+
+  #flagCanvas {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 4px;
+  }
+
+  .hero-wordmark {
+    text-align: center;
+    z-index: 2;
+    margin-top: 2.5rem;
+  }
+
+  .hero-wordmark h1 {
+    font-family: 'Pirata One', cursive;
+    font-size: clamp(4rem, 12vw, 9rem);
+    line-height: 0.9;
+    color: var(--gold);
+    text-shadow:
+      0 0 40px rgba(212,160,23,0.5),
+      0 4px 0 rgba(139,0,0,0.5),
+      0 8px 0 rgba(0,0,0,0.8);
+    letter-spacing: 0.04em;
+    animation: glowPulse 3s ease-in-out infinite;
+  }
+
+  @keyframes glowPulse {
+    0%, 100% { text-shadow: 0 0 40px rgba(212,160,23,0.5), 0 4px 0 rgba(139,0,0,0.5), 0 8px 0 rgba(0,0,0,0.8); }
+    50% { text-shadow: 0 0 60px rgba(212,160,23,0.8), 0 4px 0 rgba(139,0,0,0.7), 0 8px 0 rgba(0,0,0,0.8); }
+  }
+
+  .hero-wordmark .subtitle {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1rem, 3vw, 1.6rem);
+    letter-spacing: 0.5em;
+    color: rgba(232,217,192,0.55);
+    margin-top: 0.5rem;
+  }
+
+  .hero-tagline {
+    margin-top: 1.5rem;
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    color: rgba(232,217,192,0.4);
+    text-transform: uppercase;
+    font-style: italic;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0.4;
+    animation: bounce 2s ease-in-out infinite;
+  }
+
+  .scroll-hint span { font-size: 0.65rem; letter-spacing: 0.3em; }
+  .scroll-hint::after { content: '▼'; font-size: 1rem; }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(6px); }
+  }
+
+  /* ——— ABOUT ——— */
+  .about {
+    padding: 6rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+  }
+
+  .section-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.5em;
+    color: var(--gold);
+    opacity: 0.7;
+    margin-bottom: 1rem;
+  }
+
+  .about p {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    line-height: 1.9;
+    color: rgba(232,217,192,0.75);
+  }
+
+  .about p strong {
+    color: var(--gold);
+    font-style: normal;
+  }
+
+  .divider {
+    width: 80px;
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    margin: 3rem auto;
+  }
+
+  /* ——— CREW ——— */
+  .crew {
+    padding: 4rem 2rem 8rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .crew-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .crew-header h2 {
+    font-family: 'Pirata One', cursive;
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    color: var(--bone);
+    text-shadow: 0 2px 0 rgba(139,0,0,0.4), 0 0 30px rgba(212,160,23,0.15);
+  }
+
+  .crew-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+  }
+
+  .crew-card {
+    background: var(--smoke);
+    border: 1px solid rgba(212,160,23,0.12);
+    border-radius: 2px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+
+  .crew-card:hover {
+    transform: translateY(-6px) rotate(0.4deg);
+    border-color: rgba(212,160,23,0.4);
+  }
+
+  /* corner accent */
+  .crew-card::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 60px; height: 60px;
+    background: linear-gradient(225deg, rgba(212,160,23,0.15) 0%, transparent 60%);
+  }
+
+  /* bottom glow on hover */
+  .crew-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+    transform-origin: left;
+  }
+
+  .crew-card:hover::after { transform: scaleX(1); }
+
+  .crew-avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: #2a2a2a;
+    border: 2px solid rgba(212,160,23,0.3);
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Pirata One', cursive;
+    font-size: 2rem;
+    color: var(--gold);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .crew-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%) contrast(1.1);
+    transition: filter 0.3s;
+  }
+
+  .crew-card:hover .crew-avatar img {
+    filter: grayscale(60%) contrast(1.1) sepia(20%);
+  }
+
+  .crew-role {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    margin-bottom: 0.3rem;
+  }
+
+  .crew-name {
+    font-family: 'Pirata One', cursive;
+    font-size: 1.5rem;
+    color: var(--bone);
+    margin-bottom: 0.8rem;
+  }
+
+  .crew-bio {
+    font-size: 0.78rem;
+    line-height: 1.7;
+    color: rgba(232,217,192,0.5);
+    margin-bottom: 1rem;
+  }
+
+  .crew-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .tag {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    padding: 0.25rem 0.6rem;
+    border: 1px solid rgba(212,160,23,0.25);
+    color: rgba(212,160,23,0.7);
+    text-transform: uppercase;
+    border-radius: 1px;
+  }
+
+  /* ——— FOOTER ——— */
+  footer {
+    border-top: 1px solid rgba(212,160,23,0.1);
+    padding: 2rem;
+    text-align: center;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: rgba(232,217,192,0.2);
+  }
+
+  footer span { color: var(--gold); opacity: 0.5; }
+
+  /* ——— ENTRANCE ANIMATIONS ——— */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* stagger for crew cards */
+  .crew-card:nth-child(1) { transition-delay: 0.1s; }
+  .crew-card:nth-child(2) { transition-delay: 0.2s; }
+  .crew-card:nth-child(3) { transition-delay: 0.3s; }
+  .crew-card:nth-child(4) { transition-delay: 0.4s; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">⚓ VIBE TECH</div>
+  <ul class="nav-links">
+    <li><a href="#about">MANIFEST</a></li>
+    <li><a href="#crew">CREW</a></li>
+    <li><a href="#contact">CONTACT</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-rule"></div>
+
+  <div class="flag-container">
+    <img id="flagSrc" src="Vibe_roger.jpeg" alt="Vibe Tech Jolly Roger" style="display:none;" />
+    <canvas id="flagCanvas"></canvas>
+  </div>
+
+  <div class="hero-wordmark">
+    <h1>VIBE TECH</h1>
+    <p class="subtitle">We Sail Different</p>
+    <p class="hero-tagline">Born in the fields · Built in the cloud · Feared in the market</p>
+  </div>
+
+  <div class="scroll-hint">
+    <span>SCROLL</span>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="about fade-up">
+  <p class="section-label">// MANIFEST</p>
+  <p>
+    We are <strong>Vibe Tech</strong> — a scrappy, fearless crew of builders who dropped anchor where others wouldn't dare. Rooted in <strong>Haryanvi grit</strong>, fuelled by milk and code, we build tech that hits different. No suits. No boardrooms. Just a black flag, crossed scythes, and an obsession with shipping things that matter.
+  </p>
+  <div class="divider"></div>
+</section>
+
+<!-- CREW -->
+<section id="crew" class="crew">
+  <div class="crew-header fade-up">
+    <p class="section-label">// THE CREW</p>
+    <h2>Team Titans</h2>
+  </div>
+
+  <div class="crew-grid">
+
+    <!-- CEO -->
+    <div class="crew-card fade-up">
+      <div class="crew-avatar">
+        <img src="1.jpeg" alt="Parag Duhan" />
+      </div>
+      <p class="crew-role">⚓ Captain · CEO</p>
+      <h3 class="crew-name">Parag Duhan</h3>
+      <p class="crew-bio">9+ years navigating the stormy seas of advertising. He doesn't pitch decks — he burns ships and builds new ones. The captain sets the compass.</p>
+      <div class="crew-tags">
+        <span class="tag">9+ Yrs Advertising</span>
+        <span class="tag">Electronics Eng</span>
+        <span class="tag">Visionary</span>
+      </div>
+    </div>
+
+    <!-- CMO -->
+    <div class="crew-card fade-up">
+      <div class="crew-avatar">
+        <img src="2.jpeg" alt="Yashender Dalal" />
+      </div>
+      <p class="crew-role">🗺️ First Mate · CMO</p>
+      <h3 class="crew-name">Yashender Dalal</h3>
+      <p class="crew-bio">100+ cities visited, zero destinations left off the map. A relentless explorer with an Electronics background who turns footprints into funnels.</p>
+      <div class="crew-tags">
+        <span class="tag">100+ Cities</span>
+        <span class="tag">Marketing</span>
+        <span class="tag">Electronics Eng</span>
+      </div>
+    </div>
+
+    <!-- CTO -->
+    <div class="crew-card fade-up">
+      <div class="crew-avatar">
+        <img src="3.jpeg" alt="Veer Hooda" />
+      </div>
+      <p class="crew-role">⚙️ Navigator · CTO</p>
+      <h3 class="crew-name">Veer Hooda</h3>
+      <p class="crew-bio">20+ Python, AI, and language projects deep. An Electronics Engineer who speaks fluent machine. If it can be built, Veer's already halfway done.</p>
+      <div class="crew-tags">
+        <span class="tag">20+ AI Projects</span>
+        <span class="tag">Python</span>
+        <span class="tag">Electronics Eng</span>
+      </div>
+    </div>
+
+    <!-- CCO -->
+    <div class="crew-card fade-up">
+      <div class="crew-avatar">
+        <img src="4.jpeg" alt="Tarang Rathee" />
+      </div>
+      <p class="crew-role">🎨 Quartermaster · CCO</p>
+      <h3 class="crew-name">Tarang Rathee</h3>
+      <p class="crew-bio">1000+ day Duolingo streak. Art Major. She's the crew member who shows up every single day — and makes everything beautiful while doing it.</p>
+      <div class="crew-tags">
+        <span class="tag">1000+ Duolingo</span>
+        <span class="tag">Art Major</span>
+        <span class="tag">Creative Lead</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer id="contact">
+  <p>⚓ &nbsp;<span>VIBE TECH</span> &nbsp;·&nbsp; Rohtak, Haryana &nbsp;·&nbsp; We sail different &nbsp;·&nbsp; 2026</p>
+</footer>
+
+<script>
+  // ——— CANVAS FLAG WAVE ———
+  const canvas = document.getElementById('flagCanvas');
+  const ctx = canvas.getContext('2d');
+  const img = document.getElementById('flagSrc');
+
+  const COLS = 40;
+  const ROWS = 24;
+  let W, H, segW, segH;
+  let t = 0;
+
+  function resize() {
+    const rect = canvas.parentElement.getBoundingClientRect();
+    W = Math.round(rect.width);
+    H = Math.round(W * (img.naturalHeight / img.naturalWidth || 9/16));
+    canvas.width = W;
+    canvas.height = H;
+    segW = W / COLS;
+    segH = H / ROWS;
+  }
+
+  function drawWavingFlag() {
+    ctx.clearRect(0, 0, W, H);
+    t += 0.035;
+
+    // Wind gust strength oscillates
+    const gustStrength = 18 + Math.sin(t * 0.4) * 8 + Math.sin(t * 1.1) * 4;
+
+    for (let row = 0; row < ROWS; row++) {
+      for (let col = 0; col < COLS; col++) {
+        const sx = (col / COLS) * img.naturalWidth;
+        const sy = (row / ROWS) * img.naturalHeight;
+        const sw = img.naturalWidth / COLS;
+        const sh = img.naturalHeight / ROWS;
+
+        // X position of this column in the canvas
+        const px = col * segW;
+        const py = row * segH;
+
+        // Wave: multiple sine waves combined, pinned at left edge
+        const xFactor = (col / COLS);              // 0 at pole, 1 at free edge
+        const xFactorEased = xFactor * xFactor;   // flag hangs tighter near pole
+
+        const wave =
+          Math.sin(xFactor * 3.5 - t * 2.2) * gustStrength * xFactorEased
+        + Math.sin(xFactor * 5.0 - t * 3.1) * (gustStrength * 0.4) * xFactorEased
+        + Math.sin(xFactor * 8.0 - t * 4.5) * (gustStrength * 0.15) * xFactorEased;
+
+        // Horizontal stretch: compress/expand columns with the wave
+        const nextXFactor = ((col + 1) / COLS);
+        const nextWave =
+          Math.sin(nextXFactor * 3.5 - t * 2.2) * gustStrength * (nextXFactor * nextXFactor)
+        + Math.sin(nextXFactor * 5.0 - t * 3.1) * (gustStrength * 0.4) * (nextXFactor * nextXFactor)
+        + Math.sin(nextXFactor * 8.0 - t * 4.5) * (gustStrength * 0.15) * (nextXFactor * nextXFactor);
+
+        // Row ripple for vertical curl
+        const rowOff = Math.sin(row / ROWS * Math.PI) * xFactorEased * gustStrength * 0.15;
+
+        // Destination polygon corners
+        const x0 = px,              y0 = py + wave + rowOff;
+        const x1 = px + segW,       y1 = py + nextWave + rowOff;
+        const x2 = px + segW,       y2 = py + segH + nextWave + rowOff;
+        const x3 = px,              y3 = py + segH + wave + rowOff;
+
+        // Transform to fit source tile into this quad
+        const scaleX = (x1 - x0) / segW;
+        const skewY  = (y1 - y0) / segW;
+        const skewX  = (x3 - x0) / segH;
+        const scaleY = (y3 - y0) / segH;
+
+        ctx.save();
+        ctx.setTransform(scaleX, skewY, skewX, scaleY, x0, y0);
+        ctx.drawImage(img,
+          sx, sy, sw, sh,
+          -1, -1, segW + 2, segH + 2
+        );
+
+        // Shade the wave (dark in troughs, bright on crests)
+        const brightness = wave / gustStrength;
+        if (brightness < 0) {
+          ctx.fillStyle = `rgba(0,0,0,${Math.min(0.35, -brightness * 0.4)})`;
+        } else {
+          ctx.fillStyle = `rgba(255,255,255,${Math.min(0.12, brightness * 0.12)})`;
+        }
+        ctx.fillRect(0, 0, segW, segH);
+
+        ctx.restore();
+      }
+    }
+
+    requestAnimationFrame(drawWavingFlag);
+  }
+
+  img.onload = () => {
+    resize();
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    window.addEventListener('resize', resize);
+    drawWavingFlag();
+  };
+
+  // ——— FADE-UP OBSERVER ———
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(el => {
+      if (el.isIntersecting) el.target.classList.add('visible');
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
