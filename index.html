@@ -419,7 +419,7 @@
 <section id="about" class="about fade-up">
   <p class="section-label">// MANIFEST</p>
   <p>
-    We are <strong>Vibe Tech</strong> — a scrappy, fearless crew of builders who dropped anchor where others wouldn't dare. Rooted in <strong>Haryanvi grit</strong>, fuelled by milk and code, we build tech that hits different. No suits. No boardrooms. Just a black flag, crossed scythes, and an obsession with shipping things that matter.
+    We are <strong>Vibe Tech</strong> — a scrappy, fearless crew of builders who dropped anchor where others wouldn't dare. Rooted in <strong>Haryanvi grit</strong>, fuelled by chai and code, we build tech that hits different. No suits. No boardrooms. Just a black flag, crossed scythes, and an obsession with shipping things that matter.
   </p>
   <div class="divider"></div>
 </section>
@@ -497,7 +497,7 @@
 </section>
 
 <footer id="contact">
-  <p>⚓ &nbsp;<span>VIBE TECH</span> &nbsp;·&nbsp; Rohtak, Haryana &nbsp;·&nbsp; We sail different &nbsp;·&nbsp; 2026</p>
+  <p>⚓ &nbsp;<span>VIBE TECH</span> &nbsp;·&nbsp; Rohtak, Haryana &nbsp;·&nbsp; We sail different &nbsp;·&nbsp; 2025</p>
 </footer>
 
 <script>
@@ -593,13 +593,21 @@
     requestAnimationFrame(drawWavingFlag);
   }
 
-  img.onload = () => {
-    resize();
+  function startFlag() {
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
+    resize();
     window.addEventListener('resize', resize);
     drawWavingFlag();
-  };
+  }
+
+  // Handle cached images (already loaded) and fresh loads
+  if (img.complete && img.naturalWidth > 0) {
+    startFlag();
+  } else {
+    img.onload = startFlag;
+    img.onerror = () => console.error('Flag image failed to load');
+  }
 
   // ——— FADE-UP OBSERVER ———
   const observer = new IntersectionObserver((entries) => {
